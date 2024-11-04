@@ -196,3 +196,13 @@ document.addEventListener("DOMContentLoaded", () => {
         displayOrders();
     }
 });
+// clear order
+async function clearOrders() {
+    if (confirm("Are you sure you want to clear all orders? This action cannot be undone.")) {
+        await fetch(`${BASE_URL}/clearOrders`, {
+            method: "DELETE"
+        });
+        alert("All orders have been cleared!");
+        displayOrders(); // Refresh the order list in the dashboard
+    }
+}

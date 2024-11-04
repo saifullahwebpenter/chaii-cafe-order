@@ -50,8 +50,3 @@ app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
 // delete orders
-// Clear all orders
-app.delete("/clearOrders", async (req, res) => {
-    await Order.deleteMany({});
-    res.json({ message: "All orders cleared successfully!" });
-});

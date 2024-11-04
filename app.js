@@ -127,3 +127,72 @@ function completeOrder(index) {
     alert(`Order for Table ${orders[index].tableNumber} is completed.`);
     displayOrders(); // Refresh order list
 }
+
+
+
+// connect front end to backend
+const BASE_URL = "http://localhost:5000"; // Replace with your deployed URL
+
+async function placeOrder() {
+    const tableNumber = document.getElementById("table-number").value;
+    const username = localStorage.getItem("loggedInUser");
+    const order = {
+        username,
+        tableNumber,
+        items: {
+            chai: document.getElementById("chai").value,
+            cigarette: document.getElementById("cigarette").value,
+            andaParatha: document.getElementById("anda-paratha").value,
+            alooParatha: document.getElementById("aloo-paratha").value
+        },
+        time: new Date().toLocaleString(),
+        status: "pending"
+    };
+
+    // Send the order to the backend
+    await fetch(`${BASE_URL}/placeOrder`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order)
+    });
+    alert("Order placed successfully!");
+}
+
+async function displayOrders() {
+    const response = await fetch(`${BASE_URL}/orders`);
+    const orders = await response.json();
+
+    const ordersList = document.getElementById("orders-list");
+    ordersList.innerHTML = ""; // Clear previous orders
+
+    orders.forEach((order) => {
+        const orderDiv = document.createElement("div");
+        orderDiv.classList.add("order-item");
+        orderDiv.innerHTML = `
+            <p><strong>User:</strong> ${order.username}</p>
+            <p><strong>Table:</strong> ${order.tableNumber}</p>
+            <p><strong>Order Time:</strong> ${order.time}</p>
+            <p><strong>Status:</strong> ${order.status}</p>
+            <button onclick="updateOrderStatus('${order._id}', 'in process')">Approve</button>
+            <button onclick="updateOrderStatus('${order._id}', 'completed')">Complete</button>
+        `;
+        ordersList.appendChild(orderDiv);
+    });
+}
+
+async function updateOrderStatus(orderId, status) {
+    await fetch(`${BASE_URL}/updateOrder/${orderId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status })
+    });
+    alert(`Order status updated to "${status}".`);
+    displayOrders();
+}
+
+// Automatically display orders for the admin on page load
+document.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem("userType") === "admin") {
+        displayOrders();
+    }
+});

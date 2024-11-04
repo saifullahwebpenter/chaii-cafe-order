@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Order Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="login-section">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <div id="order-section" style="display: none;">
+        <h2>Place Your Order</h2>
+        <label for="table-number">Table Number:</label>
+        <input type="number" id="table-number" placeholder="Enter your table number">
+
+        <h3>Order Items</h3>
+        <label>Chai ☕: <input type="number" id="chai" value="0"></label><br>
+        <label>Cigarette 🚬: <input type="number" id="cigarette" value="0"></label><br>
+        <label>Anda Paratha 🍳: <input type="number" id="anda-paratha" value="0"></label><br>
+        <label>Aloo Paratha 🥔: <input type="number" id="aloo-paratha" value="0"></label><br>
+
+        <button onclick="placeOrder()">Confirm Order</button>
+        <button onclick="logout()">Logout</button>
+
+    </div>
+
+
+    <script src="app.js"></script>
+</body>
+</html>
